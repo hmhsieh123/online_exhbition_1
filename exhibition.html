@@ -897,6 +897,35 @@
 }
 </style>
 
+
+<style>
+/* 桌機版：放大圖頁面的作品資訊文字整體放大；手機版不動 */
+@media (min-width: 601px){
+  .lightbox-info,
+  #lightboxInfo{
+    font-size:17px !important;
+    line-height:1.7 !important;
+  }
+
+  .lightbox-info *,
+  #lightboxInfo *{
+    font-size:inherit !important;
+  }
+
+  .lightbox-info .lightbox-info-label,
+  #lightboxInfo .lightbox-info-label{
+    font-size:16px !important;
+    line-height:1.55 !important;
+  }
+
+  .lightbox-info .lightbox-info-value,
+  #lightboxInfo .lightbox-info-value{
+    font-size:17px !important;
+    line-height:1.65 !important;
+  }
+}
+</style>
+
 </head>
 <body>
 
