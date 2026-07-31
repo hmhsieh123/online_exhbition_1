@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1600" viewBox="0 0 900 1600">
+<defs>
+<radialGradient id="bg" cx="50%" cy="38%" r="70%">
+<stop offset="0%" stop-color="#f7f0df"/>
+<stop offset="100%" stop-color="#d8cdb7"/>
+</radialGradient>
+</defs>
+<rect width="900" height="1600" fill="url(#bg)"/>
+<circle cx="450" cy="540" r="230" fill="none" stroke="#b9ad95" stroke-width="8" opacity=".8"/>
+<circle cx="450" cy="540" r="170" fill="none" stroke="#c9bea8" stroke-width="4" opacity=".55"/>
+<text x="450" y="630" text-anchor="middle" font-size="210" fill="#484d47" font-family="serif">法</text>
+<path d="M170 880 C310 820, 420 960, 560 890 S745 925, 780 840" fill="none" stroke="#777263" stroke-width="8" opacity=".55"/>
+<path d="M160 1010 C330 960, 450 1110, 740 1005" fill="none" stroke="#9c927d" stroke-width="5" opacity=".45"/>
+<text x="450" y="1180" text-anchor="middle" font-size="58" fill="#343934" font-family="serif">法音長住</text>
+<text x="450" y="1270" text-anchor="middle" font-size="32" fill="#756d5d" font-family="serif">墨韻禪心・自在觀照</text>
+<text x="450" y="1510" text-anchor="middle" font-size="24" fill="#9d927e" opacity=".55" font-family="serif">佛・書畫線上展覽</text>
+</svg>

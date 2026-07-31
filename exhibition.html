@@ -1,0 +1,1588 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noimageindex,nosnippet">
+<meta name="referrer" content="same-origin">
+<title>孝行慈心化觀音｜線上書畫個展</title>
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+/* =========================================================
+   exhibition.html：左上角聯名 Logo
+   首頁與放大圖 Lightbox 都維持顯示
+   ========================================================= */
+.exhibition-site-logo{
+    position:absolute;
+    top:18px;
+    left:24px;
+    z-index:99999;
+    width:clamp(250px,21vw,380px);
+    pointer-events:none;
+}
+
+.exhibition-site-logo img{
+    display:block;
+    width:100%;
+    height:auto;
+    object-fit:contain;
+}
+
+/* 避免放大圖 overlay 蓋住 Logo */
+.lightbox,
+.author-modal{
+    z-index:9000;
+}
+
+@media(max-width:900px){
+    .exhibition-site-logo{
+        top:14px;
+        left:16px;
+        width:285px;
+    }
+}
+
+@media(max-width:700px){
+    .exhibition-site-logo{
+        top:10px;
+        left:10px;
+        width:min(66vw,270px);
+    }
+}
+</style>
+
+
+<style>
+.back-intro-button{
+  position:fixed;
+  left:24px;
+  bottom:22px;
+  z-index:99999;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 13px;
+  border:1px solid rgba(240,234,223,.55);
+  border-radius:3px;
+  background:rgba(20,28,25,.55);
+  color:#f0eadf;
+  text-decoration:none;
+  font-size:12px;
+  letter-spacing:.08em;
+  backdrop-filter:blur(5px);
+  transition:background .25s ease, border-color .25s ease, opacity .25s ease;
+}
+
+.back-intro-button:hover{
+  background:rgba(240,234,223,.12);
+  border-color:#f0eadf;
+}
+
+@media(max-width:600px){
+  .back-intro-button{
+    left:10px;
+    bottom:10px;
+    padding:7px 10px;
+    font-size:11px;
+  }
+}
+</style>
+
+
+<style>
+/* =========================================================
+   手機版 compact layout
+   目標：
+   1. 主要內容儘量在一個畫面呈現
+   2. 必要時只需少量向下捲動
+   3. Logo、標題、關於作者、Tag 彼此不重疊
+   僅影響 <= 600px，桌機版維持原樣
+   ========================================================= */
+@media(max-width:600px){
+
+  html,
+  body{
+    min-height:100%;
+    overflow-x:hidden;
+  }
+
+  body{
+    position:relative;
+    min-height:100svh;
+  }
+
+  /* Logo 再縮小，不佔太多頂部空間 */
+  .exhibition-site-logo{
+    position:absolute !important;
+    top:10px !important;
+    left:10px !important;
+    width:145px !important;
+    max-width:40vw !important;
+    z-index:120 !important;
+  }
+
+  /* 關於作者維持右上，尺寸縮小 */
+  .author-link{
+    position:absolute !important;
+    top:12px !important;
+    right:8px !important;
+    left:auto !important;
+    padding:5px 6px !important;
+    font-size:11px !important;
+    letter-spacing:1px !important;
+    white-space:nowrap !important;
+    z-index:121 !important;
+  }
+
+  /* 為 Logo / 關於作者預留高度，避免和標題撞在一起 */
+  .header{
+    padding:64px 8px 5px !important;
+    margin:0 !important;
+  }
+
+  .header-small{
+    font-size:8px !important;
+    letter-spacing:4px !important;
+    line-height:1.2 !important;
+  }
+
+  .header h1{
+    margin:7px 0 0 !important;
+    font-size:23px !important;
+    line-height:1.25 !important;
+    letter-spacing:4px !important;
+    white-space:nowrap !important;
+  }
+
+  .header-line{
+    margin:9px auto 7px !important;
+    width:48px !important;
+  }
+
+  /* 4 個 Tag：縮小高度，最多兩行，不擠壓作品 */
+  .exhibition-tags{
+    display:flex !important;
+    flex-wrap:wrap !important;
+    justify-content:center !important;
+    gap:4px !important;
+    margin:4px auto 3px !important;
+    padding:0 6px !important;
+    width:min(96vw,430px) !important;
+  }
+
+  .exhibition-tag{
+    margin:0 !important;
+    padding:4px 7px !important;
+    font-size:9px !important;
+    line-height:1.25 !important;
+    letter-spacing:.5px !important;
+    white-space:nowrap !important;
+  }
+
+  /* 作品輪播區壓縮高度，保留原本中央作品比例與輪播方式 */
+  .exhibition{
+    height:390px !important;
+    min-height:390px !important;
+    padding-top:0 !important;
+    margin-top:0 !important;
+  }
+
+  .slider{
+    height:100% !important;
+  }
+
+  .slide{
+    width:205px !important;
+  }
+
+  .slide.prev{
+    transform:translateX(-188px) scale(.50) !important;
+  }
+
+  .slide.next{
+    transform:translateX(188px) scale(.50) !important;
+  }
+
+  .slide.far-prev,
+  .slide.far-next{
+    opacity:0 !important;
+    pointer-events:none !important;
+  }
+
+  /* 左右鍵縮小並貼近作品，避免吃掉畫面 */
+  .arrow{
+    width:34px !important;
+    height:54px !important;
+    font-size:27px !important;
+  }
+
+  .prev-button{
+    left:4px !important;
+  }
+
+  .next-button{
+    right:4px !important;
+  }
+
+  /* 作品文字區壓縮 */
+  .art-information{
+    padding:1px 10px 8px !important;
+  }
+
+  .art-number{
+    font-size:9px !important;
+    letter-spacing:3px !important;
+  }
+
+  .art-information h2{
+    margin:5px 0 4px !important;
+    font-size:19px !important;
+    letter-spacing:4px !important;
+  }
+
+  .art-information p{
+    font-size:10px !important;
+    letter-spacing:1.5px !important;
+    line-height:1.4 !important;
+  }
+
+  .dots{
+    margin-top:8px !important;
+    gap:8px !important;
+  }
+
+  .dot{
+    width:6px !important;
+    height:6px !important;
+  }
+
+  .dot.active{
+    width:22px !important;
+  }
+
+  .control-hint{
+    padding:4px 12px 16px !important;
+    font-size:9px !important;
+    line-height:1.55 !important;
+    letter-spacing:2px !important;
+  }
+
+  /* 返回開場按鈕也縮小，避免蓋到作品 */
+  .back-intro-button{
+    left:8px !important;
+    bottom:8px !important;
+    padding:5px 8px !important;
+    font-size:9px !important;
+    letter-spacing:.04em !important;
+  }
+
+  /* 點圖後的 Lightbox 也避免 Logo / 資訊互相重疊 */
+  .lightbox-viewer{
+    max-width:94vw !important;
+    max-height:78vh !important;
+  }
+
+  .lightbox-image{
+    max-width:70vw !important;
+    max-height:74vh !important;
+  }
+
+  .lightbox-info{
+    right:6px !important;
+    bottom:6px !important;
+    width:230px !important;
+    padding:9px 10px !important;
+  }
+
+  .lightbox-info-row{
+    margin-bottom:5px !important;
+    line-height:1.4 !important;
+  }
+
+  .lightbox-info-label{
+    width:58px !important;
+    font-size:9px !important;
+    letter-spacing:1px !important;
+  }
+
+  .lightbox-info-value{
+    width:145px !important;
+    font-size:10px !important;
+    letter-spacing:.5px !important;
+  }
+}
+
+/* 特別窄的手機，再稍微縮一點 */
+@media(max-width:390px){
+  .exhibition-site-logo{
+    width:128px !important;
+  }
+
+  .header{
+    padding-top:58px !important;
+  }
+
+  .header h1{
+    font-size:20px !important;
+    letter-spacing:3px !important;
+  }
+
+  .exhibition{
+    height:365px !important;
+    min-height:365px !important;
+  }
+
+  .slide{
+    width:190px !important;
+  }
+
+  .slide.prev{
+    transform:translateX(-170px) scale(.48) !important;
+  }
+
+  .slide.next{
+    transform:translateX(170px) scale(.48) !important;
+  }
+}
+</style>
+
+
+<style>
+/* =========================================================
+   手機版 Lightbox：作品資訊改到大圖正下方
+   桌機版不受影響
+   ========================================================= */
+@media(max-width:600px){
+
+  /* 放大圖內容改成上下排列 */
+  .lightbox-content,
+  .lightbox-viewer,
+  .lightbox-zoom-stage{
+    flex-direction:column !important;
+  }
+
+  .lightbox-viewer{
+    width:100% !important;
+    max-width:100vw !important;
+    height:100vh !important;
+    max-height:100vh !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    padding:54px 12px 18px !important;
+    overflow-y:auto !important;
+    overflow-x:hidden !important;
+  }
+
+  /* 大圖本身 */
+  .lightbox-image{
+    position:relative !important;
+    left:auto !important;
+    right:auto !important;
+    top:auto !important;
+    bottom:auto !important;
+    transform:none !important;
+    display:block !important;
+    width:auto !important;
+    height:auto !important;
+    max-width:88vw !important;
+    max-height:66vh !important;
+    margin:0 auto !important;
+    object-fit:contain !important;
+    flex:0 0 auto !important;
+  }
+
+  /* 資訊欄：取消右下角定位，接在圖片下面 */
+  .lightbox-info,
+  #lightboxInfo{
+    position:relative !important;
+    left:auto !important;
+    right:auto !important;
+    top:auto !important;
+    bottom:auto !important;
+    transform:none !important;
+    width:min(88vw,430px) !important;
+    max-width:430px !important;
+    max-height:none !important;
+    margin:12px auto 18px !important;
+    padding:10px 12px !important;
+    overflow:visible !important;
+    text-align:left !important;
+    flex:0 0 auto !important;
+  }
+
+  .lightbox-info-row{
+    display:flex !important;
+    align-items:flex-start !important;
+    width:100% !important;
+    margin-bottom:5px !important;
+  }
+
+  .lightbox-info-label{
+    flex:0 0 64px !important;
+    width:64px !important;
+    font-size:9px !important;
+  }
+
+  .lightbox-info-value{
+    flex:1 1 auto !important;
+    width:auto !important;
+    min-width:0 !important;
+    font-size:10px !important;
+  }
+
+  /* 左右切換鍵仍固定在圖片左右 */
+  .lightbox-prev,
+  .lightbox-next,
+  .lightbox-nav{
+    position:fixed !important;
+    top:43% !important;
+    z-index:100000 !important;
+  }
+
+  .lightbox-prev{
+    left:6px !important;
+  }
+
+  .lightbox-next{
+    right:6px !important;
+  }
+}
+</style>
+
+
+<style>
+/* 手機版：放大圖資訊欄與大圖同寬，欄位名稱/內容上下排列
+   桌機版維持原本橫向排列 */
+@media(max-width:600px){
+
+  /* 用同一個寬度基準控制大圖與資訊欄 */
+  .lightbox-image{
+    width:auto !important;
+    max-width:88vw !important;
+  }
+
+  .lightbox-info,
+  #lightboxInfo{
+    box-sizing:border-box !important;
+    width:88vw !important;
+    max-width:88vw !important;
+    margin:12px auto 18px !important;
+  }
+
+  /* 每個欄位改為上下排列：
+     作品編號
+     作品 01/05 */
+  .lightbox-info-row{
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:flex-start !important;
+    gap:3px !important;
+    width:100% !important;
+    margin-bottom:10px !important;
+  }
+
+  .lightbox-info-label{
+    display:block !important;
+    flex:none !important;
+    width:100% !important;
+    margin:0 !important;
+    font-size:9px !important;
+    line-height:1.35 !important;
+  }
+
+  .lightbox-info-value{
+    display:block !important;
+    flex:none !important;
+    width:100% !important;
+    margin:0 !important;
+    font-size:11px !important;
+    line-height:1.5 !important;
+  }
+}
+</style>
+
+
+<style>
+/* 手機版：放大圖與資訊欄使用完全相同的預設寬度 */
+@media(max-width:600px){
+  :root{
+    --mobile-lightbox-width:88vw;
+  }
+
+  .lightbox-image{
+    box-sizing:border-box !important;
+    width:var(--mobile-lightbox-width) !important;
+    max-width:var(--mobile-lightbox-width) !important;
+    height:auto !important;
+    max-height:66vh !important;
+    object-fit:contain !important;
+  }
+
+  .lightbox-info,
+  #lightboxInfo{
+    box-sizing:border-box !important;
+    width:var(--mobile-lightbox-width) !important;
+    max-width:var(--mobile-lightbox-width) !important;
+    min-width:var(--mobile-lightbox-width) !important;
+    margin:12px auto 18px !important;
+  }
+}
+</style>
+
+
+<style>
+@media(max-width:600px){
+  .mobile-info-toggle{
+    position:absolute;
+    right:12px;
+    top:12px;
+    z-index:100002;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    min-width:44px;
+    height:34px;
+    padding:0 11px;
+    border:1px solid rgba(240,234,223,.62);
+    border-radius:4px;
+    background:rgba(22,31,28,.78);
+    color:#f0eadf;
+    font-size:11px;
+    letter-spacing:.08em;
+    cursor:pointer;
+  }
+  .lightbox.show .mobile-info-toggle{
+    display:flex;
+  }
+
+  .lightbox-info,
+  #lightboxInfo{
+    display:none !important;
+  }
+
+  .lightbox-info.mobile-info-open,
+  #lightboxInfo.mobile-info-open{
+    display:block !important;
+    position:absolute !important;
+    z-index:100001 !important;
+    box-sizing:border-box !important;
+    margin:0 !important;
+    overflow-y:auto !important;
+    overflow-x:hidden !important;
+    max-height:none !important;
+  }
+
+  .lightbox-info.mobile-info-open .lightbox-info-row,
+  #lightboxInfo.mobile-info-open .lightbox-info-row{
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:flex-start !important;
+    gap:3px !important;
+    width:100% !important;
+    margin-bottom:9px !important;
+  }
+  .lightbox-info.mobile-info-open .lightbox-info-label,
+  #lightboxInfo.mobile-info-open .lightbox-info-label{
+    width:100% !important;
+    font-size:9px !important;
+    line-height:1.35 !important;
+  }
+  .lightbox-info.mobile-info-open .lightbox-info-value,
+  #lightboxInfo.mobile-info-open .lightbox-info-value{
+    width:100% !important;
+    font-size:11px !important;
+    line-height:1.45 !important;
+  }
+}
+</style>
+
+
+<style>
+/* 資訊按鈕預設隱藏，只允許手機版顯示 */
+.mobile-info-toggle{
+  display:none !important;
+}
+
+@media(max-width:600px){
+  .lightbox.show .mobile-info-toggle{
+    display:flex !important;
+  }
+
+  /* 往左移，避免與右上角 X 關閉鍵重疊 */
+  .mobile-info-toggle{
+    top:14px !important;
+    right:64px !important;
+  }
+}
+</style>
+
+
+<style>
+@media(max-width:600px){
+  .mobile-info-toggle{
+    top:auto !important;
+    right:auto !important;
+    left:12px !important;
+    bottom:auto !important;
+    min-width:64px !important;
+    height:32px !important;
+    padding:0 10px !important;
+    white-space:nowrap !important;
+  }
+}
+</style>
+
+
+<style>
+/* 手機版：輪播/手動切換時不露出白底 */
+@media(max-width:600px){
+  html,
+  body,
+  .page,
+  .main,
+  .exhibition,
+  .slider,
+  .slides,
+  .slide,
+  .art-frame,
+  .art-inner,
+  .art-image,
+  .nav-wrap,
+  .art-information,
+  .control-hint{
+    background-color:#202d29 !important;
+  }
+
+  /* 切換動畫期間保留底色，即使圖片 opacity 暫時變成 0 */
+  .slide::before,
+  .slide::after,
+  .art-frame::before,
+  .art-frame::after,
+  .art-inner::before,
+  .art-inner::after{
+    background-color:#202d29 !important;
+  }
+
+  /* 避免行動瀏覽器 tap/transform 合成層短暫出現預設白色 */
+  .slider,
+  .slide,
+  .art-frame,
+  .art-inner,
+  .art-image{
+    -webkit-backface-visibility:hidden;
+    backface-visibility:hidden;
+    transform-style:preserve-3d;
+  }
+}
+</style>
+
+
+<style>
+/* 手機版：開啟作品資訊時，資訊欄與大圖完全同尺寸且四邊切齊 */
+@media(max-width:600px){
+  .lightbox-info.mobile-info-open,
+  #lightboxInfo.mobile-info-open{
+    box-sizing:border-box !important;
+    margin:0 !important;
+    max-height:none !important;
+    overflow-y:auto !important;
+    overflow-x:hidden !important;
+  }
+}
+</style>
+
+
+<style>
+/* 手機版：作品資訊框大小調整為與中央大圖接近 */
+@media(max-width:600px){
+  .lightbox-info.mobile-info-open,
+  #lightboxInfo.mobile-info-open{
+    box-sizing:border-box !important;
+    width:82vw !important;
+    max-width:360px !important;
+    min-width:0 !important;
+    height:62vh !important;
+    max-height:520px !important;
+    min-height:360px !important;
+    overflow-y:auto !important;
+    overflow-x:hidden !important;
+  }
+}
+</style>
+
+
+<style>
+/* 手機版：放大作品資訊文字 */
+@media(max-width:600px){
+  .lightbox-info.mobile-info-open,
+  #lightboxInfo.mobile-info-open{
+    font-size:14px !important;
+    line-height:1.65 !important;
+  }
+
+  .lightbox-info.mobile-info-open .lightbox-info-label,
+  #lightboxInfo.mobile-info-open .lightbox-info-label{
+    font-size:12px !important;
+    line-height:1.45 !important;
+  }
+
+  .lightbox-info.mobile-info-open .lightbox-info-value,
+  #lightboxInfo.mobile-info-open .lightbox-info-value{
+    font-size:14px !important;
+    line-height:1.55 !important;
+  }
+}
+</style>
+
+
+<style>
+/* 手機版：大圖支援雙指縮放與放大後單指拖曳 */
+@media(max-width:600px){
+  .lightbox-zoom-stage,
+  .lightbox-viewer{
+    touch-action:none !important;
+  }
+
+  .lightbox-image{
+    touch-action:none !important;
+    transform-origin:center center !important;
+    will-change:transform !important;
+    user-select:none !important;
+    -webkit-user-select:none !important;
+    -webkit-user-drag:none !important;
+  }
+}
+</style>
+
+
+<style>
+/* 手機版：點進大圖後，作品預設尺寸再放大一些；其他不動 */
+@media (max-width: 600px){
+  .lightbox-image{
+    max-width:94vw !important;
+    max-height:82vh !important;
+  }
+}
+</style>
+
+</head>
+<body>
+
+<a href="index.html?replay=1" class="back-intro-button" title="返回開場">
+  ← 返回開場
+</a>
+
+
+<div class="exhibition-site-logo">
+  <img src="assets/exhibition-logo.png" alt="國立金門大學與三好米聯名 Logo">
+</div>
+
+<div class="background-decoration">
+  <div class="ink-circle circle-1"></div>
+  <div class="ink-circle circle-2"></div>
+</div>
+
+<button class="author-link" id="authorOpen">關於作者 →</button>
+<header class="header">
+  <div class="header-small">ONLINE EXHIBITION</div>
+  <h1>孝行慈心化觀音・書畫展</h1>
+  <div class="header-line"></div>
+  <div class="exhibition-tags" id="exhibitionTags">
+    <button type="button" class="exhibition-tag active" data-index="0">三十三觀音</button>
+    <button type="button" class="exhibition-tag" data-index="1">十二生肖八大守護神</button>
+    <button type="button" class="exhibition-tag" data-index="2">神佛聖賢</button>
+    <button type="button" class="exhibition-tag" data-index="3">三國演義</button>
+  </div>
+</header>
+
+<section class="exhibition">
+  <div class="slider" id="slider">
+    <div class="slide" data-index="0">
+      <div class="art-frame"><div class="art-inner">
+        <img class="art-image" src="" alt="" data-loaded="false">
+        <div class="zoom-hint">點擊放大作品</div>
+      </div></div>
+    </div>
+    <div class="slide" data-index="1">
+      <div class="art-frame"><div class="art-inner">
+        <img class="art-image" src="" alt="" data-loaded="false">
+        <div class="zoom-hint">點擊放大作品</div>
+      </div></div>
+    </div>
+    <div class="slide" data-index="2">
+      <div class="art-frame"><div class="art-inner">
+        <img class="art-image" src="" alt="" data-loaded="false">
+        <div class="zoom-hint">點擊放大作品</div>
+      </div></div>
+    </div>
+    <div class="slide" data-index="3">
+      <div class="art-frame"><div class="art-inner">
+        <img class="art-image" src="" alt="" data-loaded="false">
+        <div class="zoom-hint">點擊放大作品</div>
+      </div></div>
+    </div>
+    <div class="slide" data-index="4">
+      <div class="art-frame"><div class="art-inner">
+        <img class="art-image" src="" alt="" data-loaded="false">
+        <div class="zoom-hint">點擊放大作品</div>
+      </div></div>
+    </div>
+
+    <button class="arrow prev-button" id="prevButton" aria-label="上一幅作品">‹</button>
+    <button class="arrow next-button" id="nextButton" aria-label="下一幅作品">›</button>
+  </div>
+</section>
+
+<section class="art-information">
+  <div class="art-number" id="artNumber">作品 01 / 05</div>
+  <h2 id="artTitle">慈悲觀音</h2>
+  <p id="artDescription">墨韻之間・觀自在心</p>
+  <div class="dots" id="dots"></div>
+</section>
+
+<div class="control-hint">點擊中央作品可放大・使用左右箭頭或鍵盤方向鍵瀏覽</div>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose" aria-label="關閉作品">×</button>
+  <div class="lightbox-viewer">
+    <button class="lightbox-arrow lightbox-prev" id="lightboxPrev" aria-label="上一幅作品">‹</button>
+    <div class="lightbox-zoom-stage" id="lightboxZoomStage"><img class="lightbox-image" id="lightboxImage" src="" alt="放大作品"></div>
+    <button class="lightbox-arrow lightbox-next" id="lightboxNext" aria-label="下一幅作品">›</button>
+  </div>
+  <div class="lightbox-title" id="lightboxTitle"></div>
+
+    <div class="lightbox-info" id="lightboxInfo">
+      <div class="lightbox-info-row">
+        <span class="lightbox-info-label">作品編號</span>
+        <span class="lightbox-info-value" id="lightboxNumber"></span>
+      </div>
+      <div class="lightbox-info-row">
+        <span class="lightbox-info-label">作者姓名</span>
+        <span class="lightbox-info-value" id="lightboxAuthor"></span>
+      </div>
+      <div class="lightbox-info-row">
+        <span class="lightbox-info-label">作品名稱</span>
+        <span class="lightbox-info-value" id="lightboxName"></span>
+      </div>
+      <div class="lightbox-info-row">
+        <span class="lightbox-info-label">創作年份</span>
+        <span class="lightbox-info-value" id="lightboxYear"></span>
+      </div>
+      <div class="lightbox-info-row lightbox-info-description-row">
+        <span class="lightbox-info-label">作品說明</span>
+        <span class="lightbox-info-value" id="lightboxDescription"></span>
+      </div>
+      <div class="lightbox-info-row">
+        <span class="lightbox-info-label">授權方式</span>
+        <span class="lightbox-info-value" id="lightboxLicense"></span>
+      </div>
+    </div>
+</div>
+
+<div class="author-modal" id="authorModal">
+  <button class="author-close" id="authorClose">×</button>
+  <div class="author-content">
+    <div class="author-photo"><div class="author-photo-placeholder">作者照片</div></div>
+    <div class="author-info">
+      <div class="author-small">ABOUT THE ARTIST</div>
+      <h2>作者姓名</h2><div class="author-line"></div>
+      <h3>作者簡介</h3><p>請在此填入作者的生平背景、藝術養成與個人介紹。</p>
+      <h3>創作理念</h3><p>請在此介紹作者的書畫理念、佛法思想，以及作品所傳達的精神。</p>
+      <h3>藝術經歷</h3><p>請在此填入重要展覽、藝術經歷、獲獎紀錄或相關事蹟。</p>
+    </div>
+  </div>
+</div>
+<script src="js/main.js"></script>
+
+<script>
+(function(){
+  var mq = window.matchMedia("(max-width: 600px)");
+
+  function getLightbox(){
+    return document.getElementById("lightbox") || document.querySelector(".lightbox");
+  }
+  function getImage(){
+    return document.querySelector(".lightbox-image") ||
+           document.querySelector("#lightbox img");
+  }
+  function getInfo(){
+    return document.getElementById("lightboxInfo") ||
+           document.querySelector(".lightbox-info");
+  }
+
+  function ensureButton(){
+    var lightbox = getLightbox();
+    if(!lightbox) return null;
+
+    var btn = lightbox.querySelector(".mobile-info-toggle");
+    if(btn) return btn;
+
+    btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "mobile-info-toggle";
+    btn.textContent = "作品資訊";
+    btn.setAttribute("aria-expanded","false");
+    lightbox.appendChild(btn);
+
+    btn.addEventListener("click", function(e){
+      e.preventDefault();
+      e.stopPropagation();
+
+      var info = getInfo();
+      if(!info) return;
+
+      var opening = !info.classList.contains("mobile-info-open");
+      if(opening){
+        info.classList.add("mobile-info-open");
+        btn.textContent = "關閉資訊";
+        btn.setAttribute("aria-expanded","true");
+        syncInfoToImage();
+      }else{
+        info.classList.remove("mobile-info-open");
+        btn.textContent = "作品資訊";
+        btn.setAttribute("aria-expanded","false");
+      }
+    });
+
+    return btn;
+  }
+
+  function syncInfoToImage(){
+    if(!mq.matches) return;
+
+    var img = getImage();
+    var info = getInfo();
+    var lightbox = getLightbox();
+    if(!img || !info || !lightbox || !info.classList.contains("mobile-info-open")) return;
+
+    var imgRect = img.getBoundingClientRect();
+    var lbRect = lightbox.getBoundingClientRect();
+    if(imgRect.width <= 0 || imgRect.height <= 0) return;
+
+    /* 寬度不超過大圖，高度與大圖相同，因此下緣完全切齊 */
+    var panelWidth = Math.min(Math.max(imgRect.width * 0.72, 210), imgRect.width);
+
+    info.style.setProperty("width", panelWidth + "px", "important");
+    info.style.setProperty("min-width", panelWidth + "px", "important");
+    info.style.setProperty("max-width", panelWidth + "px", "important");
+    info.style.setProperty("height", imgRect.height + "px", "important");
+    info.style.setProperty("top", (imgRect.top - lbRect.top) + "px", "important");
+    info.style.setProperty("left", (imgRect.right - lbRect.left - panelWidth) + "px", "important");
+    info.style.setProperty("right", "auto", "important");
+    info.style.setProperty("bottom", "auto", "important");
+  }
+
+  function resetInfo(){
+    var info = getInfo();
+    var btn = ensureButton();
+
+    if(info){
+      info.classList.remove("mobile-info-open");
+      ["width","min-width","max-width","height","top","left","right","bottom"].forEach(function(p){
+        info.style.removeProperty(p);
+      });
+    }
+
+    if(btn){
+      btn.textContent = "作品資訊";
+      btn.setAttribute("aria-expanded","false");
+    }
+  }
+
+  function syncSoon(){
+    requestAnimationFrame(function(){
+      requestAnimationFrame(syncInfoToImage);
+    });
+    setTimeout(syncInfoToImage,80);
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    var lightbox = getLightbox();
+    var img = getImage();
+
+    ensureButton();
+
+    if(lightbox){
+      new MutationObserver(function(){
+        if(lightbox.classList.contains("show")){
+          resetInfo();
+          ensureButton();
+        }else{
+          resetInfo();
+        }
+      }).observe(lightbox,{attributes:true,attributeFilter:["class"]});
+    }
+
+    if(img){
+      img.addEventListener("load",syncSoon);
+      new MutationObserver(syncSoon).observe(img,{attributes:true,attributeFilter:["src","style","class"]});
+    }
+
+    window.addEventListener("resize",syncSoon);
+    window.addEventListener("orientationchange",function(){setTimeout(syncSoon,220);});
+  });
+})();
+</script>
+
+
+<script>
+/* 桌機版不建立資訊按鈕；手機版才啟用 */
+(function(){
+  if(!window.matchMedia("(max-width: 600px)").matches){
+    document.addEventListener("DOMContentLoaded", function(){
+      var btns=document.querySelectorAll(".mobile-info-toggle");
+      for(var i=0;i<btns.length;i++){
+        if(btns[i].parentNode) btns[i].parentNode.removeChild(btns[i]);
+      }
+    });
+  }
+})();
+</script>
+
+
+<script>
+/* 手機版：「作品資訊」位於大圖左上方，左緣與圖片切齊，並與圖片保留間距 */
+(function(){
+  function positionMobileInfoButton(){
+    if(!window.matchMedia("(max-width: 600px)").matches) return;
+
+    var lightbox =
+      document.getElementById("lightbox") ||
+      document.querySelector(".lightbox");
+
+    var img =
+      document.querySelector(".lightbox-image") ||
+      document.querySelector("#lightbox img");
+
+    var btn = lightbox && lightbox.querySelector(".mobile-info-toggle");
+
+    if(!lightbox || !img || !btn) return;
+
+    var imgRect = img.getBoundingClientRect();
+    var lbRect = lightbox.getBoundingClientRect();
+
+    if(imgRect.width <= 0 || imgRect.height <= 0) return;
+
+    /* 左邊與大圖左緣切齊；按鈕放在圖上方，與圖片留 8px */
+    var btnHeight = btn.offsetHeight || 32;
+    var left = imgRect.left - lbRect.left;
+    var top = imgRect.top - lbRect.top - btnHeight - 8;
+
+    /* 若上方空間太小，仍保留在 lightbox 可見區內 */
+    top = Math.max(8, top);
+
+    btn.style.setProperty("left", left + "px", "important");
+    btn.style.setProperty("top", top + "px", "important");
+    btn.style.setProperty("right", "auto", "important");
+    btn.style.setProperty("bottom", "auto", "important");
+  }
+
+  function positionSoon(){
+    requestAnimationFrame(function(){
+      requestAnimationFrame(positionMobileInfoButton);
+    });
+    setTimeout(positionMobileInfoButton, 80);
+    setTimeout(positionMobileInfoButton, 200);
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    var lightbox =
+      document.getElementById("lightbox") ||
+      document.querySelector(".lightbox");
+
+    var img =
+      document.querySelector(".lightbox-image") ||
+      document.querySelector("#lightbox img");
+
+    if(lightbox){
+      new MutationObserver(function(){
+        if(lightbox.classList.contains("show")){
+          positionSoon();
+        }
+      }).observe(lightbox, {
+        attributes:true,
+        attributeFilter:["class"]
+      });
+    }
+
+    if(img){
+      img.addEventListener("load", positionSoon);
+      new MutationObserver(positionSoon).observe(img, {
+        attributes:true,
+        attributeFilter:["src","style","class"]
+      });
+    }
+
+    window.addEventListener("resize", positionSoon);
+    window.addEventListener("orientationchange", function(){
+      setTimeout(positionSoon, 220);
+    });
+  });
+})();
+</script>
+
+
+<script>
+/* 最終覆寫：手機作品資訊欄 = 大圖實際顯示尺寸與位置 */
+(function(){
+  function syncExactMobileInfoPanel(){
+    if(!window.matchMedia("(max-width: 600px)").matches) return;
+
+    var lightbox =
+      document.getElementById("lightbox") ||
+      document.querySelector(".lightbox");
+
+    var img =
+      document.querySelector(".lightbox-image") ||
+      document.querySelector("#lightbox img");
+
+    var info =
+      document.getElementById("lightboxInfo") ||
+      document.querySelector(".lightbox-info");
+
+    if(!lightbox || !img || !info ||
+       !info.classList.contains("mobile-info-open")) return;
+
+    var imgRect = img.getBoundingClientRect();
+    var lbRect = lightbox.getBoundingClientRect();
+
+    if(imgRect.width <= 0 || imgRect.height <= 0) return;
+
+    info.style.setProperty("width", imgRect.width + "px", "important");
+    info.style.setProperty("min-width", imgRect.width + "px", "important");
+    info.style.setProperty("max-width", imgRect.width + "px", "important");
+
+    info.style.setProperty("height", imgRect.height + "px", "important");
+    info.style.setProperty("min-height", imgRect.height + "px", "important");
+    info.style.setProperty("max-height", imgRect.height + "px", "important");
+
+    info.style.setProperty("left", (imgRect.left - lbRect.left) + "px", "important");
+    info.style.setProperty("top", (imgRect.top - lbRect.top) + "px", "important");
+    info.style.setProperty("right", "auto", "important");
+    info.style.setProperty("bottom", "auto", "important");
+  }
+
+  function syncSoon(){
+    requestAnimationFrame(function(){
+      requestAnimationFrame(syncExactMobileInfoPanel);
+    });
+    setTimeout(syncExactMobileInfoPanel, 80);
+    setTimeout(syncExactMobileInfoPanel, 220);
+  }
+
+  document.addEventListener("click", function(e){
+    if(e.target && e.target.classList &&
+       e.target.classList.contains("mobile-info-toggle")){
+      syncSoon();
+    }
+  });
+
+  document.addEventListener("DOMContentLoaded", function(){
+    var img = document.querySelector(".lightbox-image");
+    var lightbox =
+      document.getElementById("lightbox") ||
+      document.querySelector(".lightbox");
+
+    if(img){
+      img.addEventListener("load", syncSoon);
+      new MutationObserver(syncSoon).observe(img, {
+        attributes:true,
+        attributeFilter:["src","style","class"]
+      });
+    }
+
+    if(lightbox){
+      new MutationObserver(syncSoon).observe(lightbox, {
+        attributes:true,
+        attributeFilter:["class"]
+      });
+    }
+
+    window.addEventListener("resize", syncSoon);
+    window.addEventListener("orientationchange", function(){
+      setTimeout(syncSoon, 250);
+    });
+  });
+})();
+</script>
+
+
+<script>
+/* 手機版：作品資訊框以中央大圖為基準置中 */
+(function(){
+  function positionMobileInfoPanel(){
+    if(!window.matchMedia("(max-width: 600px)").matches) return;
+
+    var info =
+      document.getElementById("lightboxInfo") ||
+      document.querySelector(".lightbox-info");
+
+    var img =
+      document.querySelector(".lightbox-image") ||
+      document.querySelector("#lightbox img");
+
+    if(!info || !img || !info.classList.contains("mobile-info-open")) return;
+
+    var r = img.getBoundingClientRect();
+    var w = Math.min(window.innerWidth * 0.82, 360);
+    var h = Math.min(window.innerHeight * 0.62, 520);
+    h = Math.max(h, 360);
+
+    var left = r.left + (r.width - w) / 2;
+    var top = r.top + (r.height - h) / 2;
+
+    left = Math.max(8, Math.min(left, window.innerWidth - w - 8));
+    top = Math.max(8, Math.min(top, window.innerHeight - h - 8));
+
+    info.style.setProperty("position","fixed","important");
+    info.style.setProperty("width",w+"px","important");
+    info.style.setProperty("max-width",w+"px","important");
+    info.style.setProperty("height",h+"px","important");
+    info.style.setProperty("max-height",h+"px","important");
+    info.style.setProperty("left",left+"px","important");
+    info.style.setProperty("top",top+"px","important");
+    info.style.setProperty("right","auto","important");
+    info.style.setProperty("bottom","auto","important");
+    info.style.setProperty("margin","0","important");
+    info.style.setProperty("transform","none","important");
+  }
+
+  function positionSoon(){
+    requestAnimationFrame(function(){
+      requestAnimationFrame(positionMobileInfoPanel);
+    });
+    setTimeout(positionMobileInfoPanel,80);
+    setTimeout(positionMobileInfoPanel,180);
+  }
+
+  document.addEventListener("click",function(e){
+    if(e.target.closest && e.target.closest(".mobile-info-toggle")){
+      positionSoon();
+    }
+  },true);
+
+  window.addEventListener("resize",positionSoon);
+  window.addEventListener("orientationchange",function(){
+    setTimeout(positionSoon,220);
+  });
+})();
+</script>
+
+
+<script>
+/* 手機版：切換上一張/下一張時，自動關閉作品資訊 */
+(function(){
+  function isMobile(){
+    return window.matchMedia("(max-width: 600px)").matches;
+  }
+
+  function closeMobileInfo(){
+    if(!isMobile()) return;
+
+    var info =
+      document.getElementById("lightboxInfo") ||
+      document.querySelector(".lightbox-info");
+
+    var lightbox =
+      document.getElementById("lightbox") ||
+      document.querySelector(".lightbox");
+
+    var btn = lightbox && lightbox.querySelector(".mobile-info-toggle");
+
+    if(info && info.classList.contains("mobile-info-open")){
+      info.classList.remove("mobile-info-open");
+
+      ["position","width","min-width","max-width","height","min-height","max-height",
+       "left","top","right","bottom","margin","transform"].forEach(function(p){
+        info.style.removeProperty(p);
+      });
+    }
+
+    if(btn){
+      btn.textContent = "作品資訊";
+      btn.setAttribute("aria-expanded","false");
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    var img =
+      document.querySelector(".lightbox-image") ||
+      document.querySelector("#lightbox img");
+
+    /* 不論是按左右箭頭、滑動，最後只要作品 src 改變就關閉資訊欄 */
+    if(img){
+      new MutationObserver(function(mutations){
+        for(var i=0;i<mutations.length;i++){
+          if(mutations[i].attributeName === "src"){
+            closeMobileInfo();
+            break;
+          }
+        }
+      }).observe(img,{
+        attributes:true,
+        attributeFilter:["src"]
+      });
+    }
+
+    /* 左右切換按鈕：在切換前立即關閉，避免畫面殘留 */
+    document.addEventListener("click", function(e){
+      var el = e.target.closest && e.target.closest(
+        ".lightbox-prev, .lightbox-next, .prev, .next, [data-direction='prev'], [data-direction='next']"
+      );
+
+      if(el){
+        closeMobileInfo();
+      }
+    }, true);
+  });
+})();
+</script>
+
+
+<script>
+/* 手機 Lightbox：雙指撐開放大、雙指收合縮小，放大後可單指拖曳 */
+(function(){
+  var scale = 1;
+  var x = 0;
+  var y = 0;
+
+  var startScale = 1;
+  var startDistance = 0;
+  var startX = 0;
+  var startY = 0;
+  var panX = 0;
+  var panY = 0;
+
+  var pinching = false;
+  var panning = false;
+
+  function mobile(){
+    return window.matchMedia("(max-width:600px)").matches;
+  }
+
+  function image(){
+    return document.querySelector(".lightbox-image") ||
+           document.querySelector("#lightbox img");
+  }
+
+  function stage(){
+    return document.querySelector(".lightbox-zoom-stage") ||
+           document.querySelector(".lightbox-viewer");
+  }
+
+  function infoOpen(){
+    var info = document.getElementById("lightboxInfo") ||
+               document.querySelector(".lightbox-info");
+    return !!(info && info.classList.contains("mobile-info-open"));
+  }
+
+  function distance(a,b){
+    var dx = b.clientX-a.clientX;
+    var dy = b.clientY-a.clientY;
+    return Math.sqrt(dx*dx+dy*dy);
+  }
+
+  function clamp(v,min,max){
+    return Math.max(min,Math.min(max,v));
+  }
+
+  function render(){
+    var img = image();
+    if(!img) return;
+    img.style.setProperty(
+      "transform",
+      "translate3d("+x+"px,"+y+"px,0) scale("+scale+")",
+      "important"
+    );
+  }
+
+  function resetZoom(){
+    scale=1;
+    x=0;
+    y=0;
+    pinching=false;
+    panning=false;
+    render();
+  }
+
+  function bind(){
+    var s = stage();
+    if(!s || s.dataset.mobilePinch==="1") return;
+    s.dataset.mobilePinch="1";
+
+    s.addEventListener("touchstart",function(e){
+      if(!mobile() || infoOpen()) return;
+
+      if(e.touches.length===2){
+        pinching=true;
+        panning=false;
+        startDistance=distance(e.touches[0],e.touches[1]);
+        startScale=scale;
+        e.preventDefault();
+      }else if(e.touches.length===1 && scale>1){
+        panning=true;
+        pinching=false;
+        startX=e.touches[0].clientX;
+        startY=e.touches[0].clientY;
+        panX=x;
+        panY=y;
+        e.preventDefault();
+      }
+    },{passive:false});
+
+    s.addEventListener("touchmove",function(e){
+      if(!mobile() || infoOpen()) return;
+
+      if(pinching && e.touches.length===2){
+        var d=distance(e.touches[0],e.touches[1]);
+        if(startDistance>0){
+          scale=clamp(startScale*(d/startDistance),1,4);
+        }
+
+        if(scale<=1.01){
+          scale=1;
+          x=0;
+          y=0;
+        }
+
+        render();
+        e.preventDefault();
+
+      }else if(panning && e.touches.length===1 && scale>1){
+        x=panX+(e.touches[0].clientX-startX);
+        y=panY+(e.touches[0].clientY-startY);
+        render();
+        e.preventDefault();
+      }
+    },{passive:false});
+
+    s.addEventListener("touchend",function(e){
+      if(e.touches.length<2) pinching=false;
+      if(e.touches.length===0) panning=false;
+
+      if(scale<1.05){
+        resetZoom();
+      }
+    },{passive:false});
+  }
+
+  document.addEventListener("DOMContentLoaded",function(){
+    bind();
+
+    var img=image();
+    var lb=document.getElementById("lightbox") ||
+           document.querySelector(".lightbox");
+
+    if(img){
+      img.addEventListener("load",resetZoom);
+
+      new MutationObserver(function(mutations){
+        for(var i=0;i<mutations.length;i++){
+          if(mutations[i].attributeName==="src"){
+            resetZoom();
+            break;
+          }
+        }
+      }).observe(img,{
+        attributes:true,
+        attributeFilter:["src"]
+      });
+    }
+
+    if(lb){
+      new MutationObserver(function(){
+        resetZoom();
+        setTimeout(bind,0);
+      }).observe(lb,{
+        attributes:true,
+        attributeFilter:["class"]
+      });
+    }
+
+    window.addEventListener("orientationchange",function(){
+      setTimeout(resetZoom,200);
+    });
+  });
+})();
+</script>
+
+
+<script>
+/* 手機版：切換大圖作品時，自動關閉作品資訊欄 */
+(function(){
+  function isMobile(){
+    return window.matchMedia("(max-width: 600px)").matches;
+  }
+
+  function closeArtworkInfo(){
+    if(!isMobile()) return;
+
+    var info =
+      document.getElementById("lightboxInfo") ||
+      document.querySelector(".lightbox-info");
+
+    var lightbox =
+      document.getElementById("lightbox") ||
+      document.querySelector(".lightbox");
+
+    var btn = lightbox && lightbox.querySelector(".mobile-info-toggle");
+
+    if(info){
+      info.classList.remove("mobile-info-open");
+
+      [
+        "position","width","min-width","max-width",
+        "height","min-height","max-height",
+        "left","top","right","bottom",
+        "margin","transform"
+      ].forEach(function(prop){
+        info.style.removeProperty(prop);
+      });
+    }
+
+    if(btn){
+      btn.textContent = "作品資訊";
+      btn.setAttribute("aria-expanded", "false");
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    var img =
+      document.querySelector(".lightbox-image") ||
+      document.querySelector("#lightbox img");
+
+    /* 按左右箭頭時，切換前立即關閉 */
+    document.addEventListener("click", function(e){
+      var nav = e.target.closest && e.target.closest(
+        ".lightbox-prev, .lightbox-next, .lightbox-nav, " +
+        "[data-direction='prev'], [data-direction='next']"
+      );
+
+      if(nav){
+        closeArtworkInfo();
+      }
+    }, true);
+
+    /* 若作品是由其他方式切換，只要大圖 src 改變，也自動關閉 */
+    if(img){
+      new MutationObserver(function(mutations){
+        for(var i=0; i<mutations.length; i++){
+          if(mutations[i].type === "attributes" &&
+             mutations[i].attributeName === "src"){
+            closeArtworkInfo();
+            break;
+          }
+        }
+      }).observe(img, {
+        attributes:true,
+        attributeFilter:["src"]
+      });
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
